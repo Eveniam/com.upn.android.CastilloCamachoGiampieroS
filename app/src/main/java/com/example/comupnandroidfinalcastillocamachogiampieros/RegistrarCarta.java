@@ -40,7 +40,8 @@ public class RegistrarCarta extends AppCompatActivity {
     TextView tvLatitud, tvLongitud;
     ImageView ivCarta;
 
-    private String imgURL;
+    private String imgURL = "";
+    private String imgBase64 = "";
     private static final int OPEN_CAMERA_REQUEST = 1001;
     private static final int OPEN_GALLERY_REQUEST = 1002;
     @Override
@@ -88,6 +89,7 @@ public class RegistrarCarta extends AppCompatActivity {
                 carta.latitud = String.valueOf(Latitud);
                 carta.longitud = String.valueOf(Longitud);
                 carta.imageURL = imgURL;
+                carta.imagenBase64 = imgBase64;
                 carta.sincC = false;
 
                 cartaRepository.create(carta);
@@ -112,7 +114,7 @@ public class RegistrarCarta extends AppCompatActivity {
         photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
 
-        String imgBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        imgBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -131,10 +133,9 @@ public class RegistrarCarta extends AppCompatActivity {
             public void onResponse(Call<ImageResult> call, Response<ImageResult> response) {
                 if(response.isSuccessful()) {
                     imgURL = response.body().url;
-                    Log.i("MAIN_APP", imgURL);
+                    Log.i("MAIN_APP: URLIMAGEN", imgURL);
                 }
             }
-
             @Override
             public void onFailure(Call<ImageResult> call, Throwable t) {
 
