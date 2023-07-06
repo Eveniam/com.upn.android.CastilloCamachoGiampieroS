@@ -19,4 +19,7 @@ public interface CartaService {
 
     @DELETE("Carta")
     Call<Void> deleteAllCartas();
+
+    @POST("Carta")
+    Call<Carta> create(@Body Carta carta);
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.comupnandroidfinalcastillocamachogiampieros.DB.AppDataBase;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Carta;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Duelista;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.LocationData;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Repository.CartaRepository;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Repository.DuelistaRepository;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Service.CartaService;
@@ -23,6 +24,9 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class DetalleDuelista extends AppCompatActivity {
@@ -73,7 +77,7 @@ public class DetalleDuelista extends AppCompatActivity {
         });
 
 
-        CartaService serviceM = mRetro.create(CartaService.class);
+        CartaService cartaService = mRetro.create(CartaService.class);
 
         btnSincM.setOnClickListener(view -> {
             if (isNetworkConnected()) {
@@ -84,15 +88,15 @@ public class DetalleDuelista extends AppCompatActivity {
 
                     double Latitud = LocationData.getInstance().getLatitude();
                     double Longitud = LocationData.getInstance().getLongitude();
-                    movimientos.latitud = String.valueOf(Latitud);
-                    movimientos.longitud= String.valueOf(Longitud);
+                    carta.latitud = String.valueOf(Latitud);
+                    carta.longitud= String.valueOf(Longitud);
 
-                    cartaRepository.updateMovimiento(movimientos);
+                    cartaRepository.updateMovimiento(carta);
                     //*****SINCRO*************************
-                    SincronizacionMovimientos(serviceM,movimientos);
+                    Sincronizacion(cartaService,carta);
                 }
-                List<Movimientos> EliminarDBMovimiento = cartaRepository.getAllMovimientos();
-                downloadingMockAPIMovimientos(serviceM,cartaRepository,EliminarDBMovimiento);
+                List<Carta> EliminarDB = cartaRepository.getAllCarta();
+                WB(cartaService,cartaRepository,EliminarDB);
                 Toast.makeText(getBaseContext(), "SINCRONIZADO", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(getBaseContext(), "NO HAY INTERNET", Toast.LENGTH_SHORT).show();
@@ -104,5 +108,46 @@ public class DetalleDuelista extends AppCompatActivity {
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    private void Sincronizacion(CartaService cartaService, Carta carta){
+        Call<Carta> call = cartaService.create(carta);
+        call.enqueue(new Callback<Carta>() {
+            @Override
+            public void onResponse(Call<Carta> call, Response<Carta> response) {
+                if(response.isSuccessful()){
+                    Carta data = response.body();
+                    Log.i("MAIN_APP: WS", new Gson().toJson(data));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Carta> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void WB(CartaService cartaService, CartaRepository cartaRepository, List<Carta> EliminarDB){
+        //***Eleminar datos de BD
+        cartaRepository.deleteList(EliminarDB);
+        //Cargar datos de MockAPI
+        Call<List<Carta>> call = cartaService.getAllCarta(6);
+        call.enqueue(new Callback<List<Carta>>() {
+            @Override
+            public void onResponse(Call<List<Carta>> call, Response<List<Carta>> response) {
+                List<Carta> data = response.body();
+                Log.i("MAIN_APP", new Gson().toJson(data));
+
+                for (Carta carta : data) {
+                    cartaRepository.create(carta);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Carta>> call, Throwable t) {
+
+            }
+        });
     }
 }
