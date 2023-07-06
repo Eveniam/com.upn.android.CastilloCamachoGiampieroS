@@ -40,7 +40,7 @@
     <EditText
         android:id="@+id/etAtaque"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="51dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="ATAQUE"
@@ -50,7 +50,7 @@
     <EditText
         android:id="@+id/etDefensa"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="61dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="DEFENSA"
@@ -63,4 +63,92 @@
         android:layout_height="48dp"
         android:layout_weight="1"
         android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="UBICACION"
+            android:gravity="center_horizontal"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="188dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvLatitud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LATITUD"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvLongitud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LONGITUD"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_weight="1"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivCarta"
+            android:layout_width="242dp"
+            android:layout_height="151dp"
+            android:layout_weight="1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnFoto"
+                android:layout_width="118dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="FOTO" />
+
+            <Button
+                android:id="@+id/btnGaleria"
+                android:layout_width="135dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="GALERIA" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnGC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="GUARDAR" />
 </LinearLayout>
