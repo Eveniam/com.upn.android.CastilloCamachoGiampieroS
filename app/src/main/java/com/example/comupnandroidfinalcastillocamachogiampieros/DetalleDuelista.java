@@ -63,17 +63,17 @@ public class DetalleDuelista extends AppCompatActivity {
         tvNameD.setText(duelista.name);
 
         btnRM.setOnClickListener(view -> {
-//            Intent intent = new Intent(getApplicationContext(), MovimientoRegistrarActivity.class);
-//            intent.putExtra("id", idObtener);
-//            Log.i("APP_MAIN: id", String.valueOf(idObtener));
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), RegistrarCarta.class);
+            intent.putExtra("id", idObtener);
+            Log.i("APP_MAIN: id", String.valueOf(idObtener));
+            startActivity(intent);
         });
 
         btnMM.setOnClickListener(view -> {
-//            Intent intent = new Intent(getApplicationContext(), ListMovimientoActivity.class);
-//            intent.putExtra("id2", idObtener);
-//            Log.i("APP_MAIN: id2", String.valueOf(idObtener));
-//            startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), MostrarCarta.class);
+            intent.putExtra("id2", idObtener);
+            Log.i("APP_MAIN: id2", String.valueOf(idObtener));
+            startActivity(intent);
         });
 
 

@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="REGISTRAR MOVIMIENTO"
+        android:text="REGISTRAR CARTA"
         android:textSize="24sp" />
 
     <Button
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="MOSTRAR MOVIMIENTOS"
+        android:text="MOSTRAR CARTA"
         android:textSize="24sp" />
 
     <Button

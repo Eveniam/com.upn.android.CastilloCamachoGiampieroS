@@ -8,14 +8,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Carta;
 import com.example.comupnandroidfinalcastillocamachogiampieros.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class CartaAdapter extends RecyclerView.Adapter {
 
+    TextView tvNC, tvAC, tvDC, tvLC, tvLoC;
+    ImageView imageView;
     private List<Carta> items;
     public CartaAdapter(List<Carta> items) {
         this.items = items;
@@ -42,7 +47,21 @@ public class CartaAdapter extends RecyclerView.Adapter {
 
         if(item == null) return;
         View view = holder.itemView;
-        //VISTAS
+
+        tvNC = view.findViewById(R.id.tvNC);
+        tvAC = view.findViewById(R.id.tvAC);
+        tvDC = view.findViewById(R.id.tvDC);
+        tvLC = view.findViewById(R.id.tvLC);
+        tvLoC = view.findViewById(R.id.tvLoC);
+        imageView = view.findViewById(R.id.imageView);
+
+        tvNC.setText(item.name);
+        tvAC.setText(String.valueOf(item.puntosAtaque));
+        tvDC.setText(String.valueOf(item.puntosDefensa));
+        tvLC.setText(item.latitud);
+        tvLoC.setText(item.longitud);
+
+        Picasso.get().load(item.imageURL).into(imageView);
 
     }
 
