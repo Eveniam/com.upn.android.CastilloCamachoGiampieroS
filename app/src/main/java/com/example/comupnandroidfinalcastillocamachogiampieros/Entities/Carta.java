@@ -21,4 +21,7 @@ public class Carta {
 
     @ColumnInfo(name = "imageURL")
     public String imageURL;
+
+    @ColumnInfo(name = "sincC")
+    public boolean sincC;
 }

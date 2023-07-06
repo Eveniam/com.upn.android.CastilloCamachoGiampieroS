@@ -25,6 +25,9 @@
         android:theme="@style/Theme.ComupnandroidFinalCastilloCamachoGiampieroS"
         tools:targetApi="31">
         <activity
+            android:name=".ListaDuelista"
+            android:exported="false" />
+        <activity
             android:name=".Adapter.CartaAdapter"
             android:exported="false" />
         <activity

@@ -12,6 +12,9 @@ public class Duelista {
     @ColumnInfo(name = "name")
     public String name;
 
+    @ColumnInfo(name = "sincD")
+    public boolean sincD;
+
     public Duelista() {
     }
 
