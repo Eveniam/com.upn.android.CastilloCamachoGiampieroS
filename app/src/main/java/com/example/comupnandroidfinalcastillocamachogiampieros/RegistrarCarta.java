@@ -17,12 +17,16 @@ import android.widget.Toast;
 
 import com.example.comupnandroidfinalcastillocamachogiampieros.DB.AppDataBase;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Carta;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Duelista;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.LocationData;
 import com.example.comupnandroidfinalcastillocamachogiampieros.EntitiesServiceImagen.ImageRequest;
 import com.example.comupnandroidfinalcastillocamachogiampieros.EntitiesServiceImagen.ImageResult;
 import com.example.comupnandroidfinalcastillocamachogiampieros.EntitiesServiceImagen.ImageService;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Repository.CartaRepository;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Service.CartaService;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Service.DuelistaService;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.CamaraUtils;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.RetrofitBuilder;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +44,8 @@ public class RegistrarCarta extends AppCompatActivity {
     TextView tvLatitud, tvLongitud;
     ImageView ivCarta;
 
+    Retrofit mRetro;
+
     private String imgURL = "";
     private String imgBase64 = "";
     private static final int OPEN_CAMERA_REQUEST = 1001;
@@ -49,12 +55,7 @@ public class RegistrarCarta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_carta);
 
-        int idObtener;
-        idObtener = getIntent().getIntExtra("id",0);
-        Log.d("APP_MAIN: idRM", String.valueOf(idObtener));
-
-        AppDataBase db = AppDataBase.getInstance(getApplicationContext());
-        CartaRepository cartaRepository = db.cartaRepository();
+        mRetro = RetrofitBuilder.build();
 
         etNombreC = findViewById(R.id.etNombreC);
         etAtaque = findViewById(R.id.etAtaque);
@@ -66,6 +67,13 @@ public class RegistrarCarta extends AppCompatActivity {
         btnGC = findViewById(R.id.btnGC);
         ivCarta = findViewById(R.id.ivCarta);
         btnMapa = this.findViewById(R.id.btnMapa);
+
+        int idObtener;
+        idObtener = getIntent().getIntExtra("id",0);
+        Log.d("APP_MAIN: idRM", String.valueOf(idObtener));
+
+        AppDataBase db = AppDataBase.getInstance(getApplicationContext());
+        CartaRepository cartaRepository = db.cartaRepository();
 
         double Latitud = LocationData.getInstance().getLatitude();
         double Longitud = LocationData.getInstance().getLongitude();
@@ -83,6 +91,8 @@ public class RegistrarCarta extends AppCompatActivity {
         btnFoto.setOnClickListener(view -> CamaraUtils.setUpOpenCamera(RegistrarCarta.this));
         btnGaleria.setOnClickListener(view -> CamaraUtils.setUpOpenGallery(RegistrarCarta.this));
 
+        CartaService cartaService = mRetro.create(CartaService.class);
+
         btnGC.setOnClickListener(view -> {
             if (etAtaque.getText().toString().trim().isEmpty() || etDefensa.getText().toString().trim().isEmpty()) {
                 Toast.makeText(getBaseContext(), "Llenar Datos", Toast.LENGTH_SHORT).show();
@@ -99,6 +109,21 @@ public class RegistrarCarta extends AppCompatActivity {
                 carta.sincC = false;
 
                 cartaRepository.create(carta);
+
+                Call<Carta> call= cartaService.create(carta);
+                call.enqueue(new Callback<Carta>() {
+                    @Override
+                    public void onResponse(Call<Carta> call, Response<Carta> response) {
+                        if (response.isSuccessful()) {
+                            Carta data = response.body();
+                            Log.i("MAIN_APP: WS", new Gson().toJson(data));
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Carta> call, Throwable t) {
+
+                    }
+                });
 
                 Log.i("MAIN_APP: GuardaC en DB", new Gson().toJson(carta));
             }
