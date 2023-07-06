@@ -19,6 +19,6 @@ public class Carta {
     @ColumnInfo(name = "puntosDefensa")
     public int puntosDefensa;
 
-    @ColumnInfo(name = "imgURL")
-    public String imgURL;
+    @ColumnInfo(name = "imageURL")
+    public String imageURL;
 }
