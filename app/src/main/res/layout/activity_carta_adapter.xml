@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="206dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         tools:src="@tools:sample/avatars" />
 
@@ -48,6 +48,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LONGITUD" />
+
+        <Button
+            android:id="@+id/btnMapaA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MAPA" />
 
     </LinearLayout>
 </LinearLayout>

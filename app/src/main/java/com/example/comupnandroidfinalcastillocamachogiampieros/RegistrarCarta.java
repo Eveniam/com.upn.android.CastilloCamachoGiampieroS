@@ -99,6 +99,7 @@ public class RegistrarCarta extends AppCompatActivity {
                 carta.sincC = false;
 
                 cartaRepository.create(carta);
+
                 Log.i("MAIN_APP: GuardaC en DB", new Gson().toJson(carta));
             }
             Intent intent = new Intent(getApplicationContext(), DetalleDuelista.class);

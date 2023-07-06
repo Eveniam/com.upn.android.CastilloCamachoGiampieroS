@@ -4,14 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Carta;
+import com.example.comupnandroidfinalcastillocamachogiampieros.MapsActivity2;
 import com.example.comupnandroidfinalcastillocamachogiampieros.R;
 import com.squareup.picasso.Picasso;
 
@@ -21,6 +24,7 @@ public class CartaAdapter extends RecyclerView.Adapter {
 
     TextView tvNC, tvAC, tvDC, tvLC, tvLoC;
     ImageView imageView;
+    Button btnMapaA;
     private List<Carta> items;
     public CartaAdapter(List<Carta> items) {
         this.items = items;
@@ -62,6 +66,14 @@ public class CartaAdapter extends RecyclerView.Adapter {
         tvLoC.setText(item.longitud);
 
         Picasso.get().load(item.imageURL).into(imageView);
+
+        btnMapaA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MapsActivity2.class);
+                view.getContext().startActivity(intent);
+            }
+        });
 
     }
 
