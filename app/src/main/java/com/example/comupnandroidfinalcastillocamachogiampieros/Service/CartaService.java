@@ -15,16 +15,7 @@ import retrofit2.http.Query;
 
 public interface CartaService {
     @GET("Carta")
-    Call<List<Carta>> getAllCarta(@Query("limit") int limit, @Query("page") int page);
-
-    @GET("Carta/{id}")
-    Call<Carta> findUser(@Path("id") int id);
-
-    @POST("Carta")
-    Call<Carta> create(@Body Carta carta);
-
-    @PUT("Carta")
-    Call<List<Carta>> updateWEB(@Body List<Carta> cartas);
+    Call<List<Carta>> getAllCarta(@Query("limit") int limit);
 
     @DELETE("Carta")
     Call<Void> deleteAllCartas();

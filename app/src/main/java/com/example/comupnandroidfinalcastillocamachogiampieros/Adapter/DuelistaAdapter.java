@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.comupnandroidfinalcastillocamachogiampieros.DetalleDuelista;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Carta;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Duelista;
 import com.example.comupnandroidfinalcastillocamachogiampieros.R;
@@ -17,6 +21,7 @@ import java.util.List;
 
 public class DuelistaAdapter extends RecyclerView.Adapter {
 
+    TextView tvID, tvName;
     private List<Duelista> items;
     public DuelistaAdapter(List<Duelista> items) {
         this.items = items;
@@ -44,7 +49,21 @@ public class DuelistaAdapter extends RecyclerView.Adapter {
         if(item == null) return;
         View view = holder.itemView;
 
-        //VISTAS
+        tvID = view.findViewById(R.id.tvID);
+        tvName = view.findViewById(R.id.tvName);
+
+        tvID.setText(String.valueOf(item.id));
+        tvName.setText(item.name);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), DetalleDuelista.class);
+                intent.putExtra("id",item.id);
+                v.getContext().startActivity(intent);
+                Log.d("APP_MAIN: IDCuenta", String.valueOf(item.id));
+            }
+        });
     }
 
     @Override

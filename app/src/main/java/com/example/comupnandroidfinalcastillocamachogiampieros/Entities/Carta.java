@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 public class Carta {
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    @ColumnInfo(name = "createdAt")
     public int createdAt;
 
     @ColumnInfo(name = "name")
@@ -22,6 +24,15 @@ public class Carta {
     @ColumnInfo(name = "imageURL")
     public String imageURL;
 
+    @ColumnInfo(name = "latitud")
+    public String latitud;
+
+    @ColumnInfo(name = "longitud")
+    public String longitud;
+
     @ColumnInfo(name = "sincC")
     public boolean sincC;
+
+    @ColumnInfo(name = "imagenBase64")
+    public String imagenBase64;
 }

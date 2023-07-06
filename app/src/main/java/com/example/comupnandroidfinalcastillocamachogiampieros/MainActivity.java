@@ -15,6 +15,7 @@ import com.example.comupnandroidfinalcastillocamachogiampieros.DB.AppDataBase;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Duelista;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Repository.DuelistaRepository;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Service.DuelistaService;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.RetrofitBuilder;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRetro = RetrofitBuilder.build();
 
         edtName = findViewById(R.id.edtName);
         btnGuardar = findViewById(R.id.btnGuardar);
@@ -60,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        DuelistaService duelistaService = mRetro.create(DuelistaService.class);
+
         btnSincronizar.setOnClickListener(view -> {
-            DuelistaService duelistaService = mRetro.create(DuelistaService.class);
+
             if (!isNetworkConnected()){
                 Toast.makeText(getBaseContext(), "NO HAY CONEXION A INTERNET", Toast.LENGTH_SHORT).show();
             }else{
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     private void WS(DuelistaService duelistaService,DuelistaRepository duelistaRepository , List<Duelista> DeleteD){
         duelistaRepository.deleteList(DeleteD);//DELETE
 
-        Call<List<Duelista>> call = duelistaService.getAllUser(6,1);//CARGAR
+        Call<List<Duelista>> call = duelistaService.getAllUser();//CARGAR
         call.enqueue(new Callback<List<Duelista>>() {
             @Override
             public void onResponse(Call<List<Duelista>> call, Response<List<Duelista>> response) {

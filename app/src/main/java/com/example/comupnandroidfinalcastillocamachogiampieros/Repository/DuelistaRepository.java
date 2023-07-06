@@ -19,8 +19,11 @@ public interface DuelistaRepository {
     @Query("SELECT * FROM Duelista WHERE sincD LIKE :searchSincro")
     List<Duelista> searchDuelista(boolean searchSincro);
 
+    @Query("SELECT * FROM Duelista WHERE id LIKE :id")
+    Duelista searchDuelistaID(int id);
+
     @Update
-    void  update(Duelista cuenta);
+    void  update(Duelista duelista);
 
     @Insert
     void create(Duelista duelista);

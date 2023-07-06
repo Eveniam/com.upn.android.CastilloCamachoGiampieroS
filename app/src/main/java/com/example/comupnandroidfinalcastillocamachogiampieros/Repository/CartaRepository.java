@@ -17,6 +17,9 @@ public interface CartaRepository {
     @Query("SELECT * FROM Carta WHERE sincC LIKE :searchSincro")
     List<Carta> searchCarta(boolean searchSincro);
 
+    @Query("SELECT * FROM Carta WHERE createdAt LIKE :id")
+    List<Carta> searchCartaID(int id);
+
     @Insert
     void create(Carta carta);
 }

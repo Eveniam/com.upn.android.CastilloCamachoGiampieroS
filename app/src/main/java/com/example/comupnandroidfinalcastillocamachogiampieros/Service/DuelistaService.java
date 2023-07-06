@@ -15,17 +15,14 @@ import retrofit2.http.Query;
 
 public interface DuelistaService {
     @GET("Duelista")
-    Call<List<Duelista>> getAllUser(@Query("limit") int limit, @Query("page") int page);
+    Call<List<Duelista>> getAllUser();
 
-    @GET("cuenta/{id}")
-    Call<Duelista> findUser(@Path("id") int id);
-
-    @POST("cuenta")
+    @POST("Duelista")
     Call<Duelista> create(@Body Duelista duelista);
 
-    @PUT("cuenta")
+    @PUT("Duelista")
     Call<List<Duelista>> updateWEB(@Body List<Duelista> duelistas);
 
-    @DELETE("cuenta")
+    @DELETE("Duelista")
     Call<Void> deleteAllDeulistas();
 }
