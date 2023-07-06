@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrarCarta extends AppCompatActivity {
 
-    Button btnFoto, btnGaleria, btnGC;
+    Button btnFoto, btnGaleria, btnGC, btnMapa;
     EditText etNombreC, etAtaque, etDefensa;
     TextView tvLatitud, tvLongitud;
     ImageView ivCarta;
@@ -65,11 +65,17 @@ public class RegistrarCarta extends AppCompatActivity {
         btnGaleria= findViewById(R.id.btnGaleria);
         btnGC = findViewById(R.id.btnGC);
         ivCarta = findViewById(R.id.ivCarta);
+        btnMapa = this.findViewById(R.id.btnMapa);
 
         double Latitud = LocationData.getInstance().getLatitude();
         double Longitud = LocationData.getInstance().getLongitude();
         Log.d("MAIN_APP3-Lat", String.valueOf(Latitud));
         Log.d("MAIN_APP3-Long", String.valueOf(Longitud));
+
+        btnMapa.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+            startActivity(intent);
+        });
 
         tvLatitud.setText(String.valueOf(Latitud));
         tvLongitud.setText(String.valueOf(Longitud));

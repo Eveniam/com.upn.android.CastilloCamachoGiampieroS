@@ -64,6 +64,13 @@
         android:layout_weight="1"
         android:background="?android:attr/listDivider" />
 
+    <Button
+        android:id="@+id/btnMapa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="MAPA" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="71dp"
