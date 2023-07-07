@@ -60,7 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         finish();
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -70,17 +69,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-
     @Override
     public void onLocationChanged(@NonNull Location location) {
         Double latitude = location.getLatitude();
         Double longitude = location.getLongitude();
-        LocationData.getInstance().setCoordinates(latitude, longitude);
+        LocationData.getInstance().setCoordinates(latitude,longitude);
         LatLng latLng = new LatLng(latitude, longitude);
 ////        mMap.addMarker(new MarkerOptions().position(latLng).title("Ub"));
 ////        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        LocationData.getInstance().setCoordinates(latitude, longitude);
-        Log.i("MAIN_APPMaps: Location - ", "Latitude: " + latitude);
-        Log.i("MAIN_APPMaps: Location - ", "Longitude: " + longitude);
+        LocationData.getInstance().setCoordinates(latitude,longitude);
+        Log.i("MAIN_APPMaps: Location - ",  "Latitude: " + latitude);
+        Log.i("MAIN_APPMaps: Location - ",  "Longitude: " + longitude);
     }
+
 }
