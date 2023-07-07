@@ -33,15 +33,11 @@ public class CartaAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        CartaAdapter.NameViewHolder viewHolder;
+
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if(viewType == 1) {
-            View view = inflater.inflate(R.layout.activity_carta_adapter, parent, false);
-            viewHolder = new NameViewHolder(view);
-        } else {
-            View view = inflater.inflate(R.layout.item_progressbar, parent, false);
-            viewHolder = new NameViewHolder(view);
-        }
+        View view = inflater.inflate(R.layout.activity_carta_adapter,parent,false);
+        NameViewHolder viewHolder = new NameViewHolder(view);
+
         return viewHolder;
     }
 
