@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Duelista")
 public class Duelista {
 
-    public int idD;
     @PrimaryKey(autoGenerate = true)
     public int id;
 

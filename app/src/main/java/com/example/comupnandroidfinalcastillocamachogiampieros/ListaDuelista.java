@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,13 +14,26 @@ import com.example.comupnandroidfinalcastillocamachogiampieros.Adapter.DuelistaA
 import com.example.comupnandroidfinalcastillocamachogiampieros.DB.AppDataBase;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Entities.Duelista;
 import com.example.comupnandroidfinalcastillocamachogiampieros.Repository.DuelistaRepository;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Service.DuelistaService;
+import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.RetrofitBuilder;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ListaDuelista extends AppCompatActivity {
 
     RecyclerView rvListaDuelista;
+
+    Retrofit mRetro;
+
+    List<Duelista> mdata = new ArrayList<>();
+    DuelistaAdapter mAdapter = new DuelistaAdapter(mdata);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +43,44 @@ public class ListaDuelista extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvListaDuelista = findViewById(R.id.rvListaDuelista);
         rvListaDuelista.setLayoutManager(layoutManager);
-        mostrarBD();
 
-    }
+        rvListaDuelista.setAdapter(mAdapter);
 
-    private void mostrarBD(){
+        mRetro = RetrofitBuilder.build();
+        DuelistaService service = mRetro.create(DuelistaService.class);
+
         AppDataBase db = AppDataBase.getInstance(this);
         DuelistaRepository repository = db.duelistaRepository();
-        List<Duelista> mdata = repository.getAllDuelista();
+        List<Duelista> duel = repository.getAllDuelista();
 
-        DuelistaAdapter mAdapter = new DuelistaAdapter(mdata);
-        rvListaDuelista.setAdapter(mAdapter);
-        Log.i("MAIN_APP: DB", new Gson().toJson(mdata));
+        if(isNetworkConnected()){
+            Call<List<Duelista>> call = service.update(duel);
+            call.enqueue(new Callback<List<Duelista>>() {
+                @Override
+                public void onResponse(Call<List<Duelista>> call, Response<List<Duelista>> response) {
+                    if (response.isSuccessful()) {
+                        List<Duelista> updatedDuelistas = response.body();
+                        mdata.clear();
+                        mdata.addAll(updatedDuelistas);
+                        mAdapter.notifyDataSetChanged();
+                        Toast.makeText(getBaseContext(), "DATOS ACTUALIZADOS", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<Duelista>> call, Throwable t) {
+                    // Manejar el caso de fallo en la llamada a la API
+                }
+            });
+        }
+
+        mdata.clear();
+        mdata.addAll(duel);
+
         Toast.makeText(getBaseContext(), "MOSTRANDO DATOS", Toast.LENGTH_SHORT).show();
+
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 }

@@ -18,6 +18,7 @@ import com.example.comupnandroidfinalcastillocamachogiampieros.Service.DuelistaS
 import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.RetrofitBuilder;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     Retrofit mRetro;
     EditText edtName;
-    Button btnGuardar, btnMostrar, btnSincronizar;
+    Button btnGuardar, btnMostrar;
+    DuelistaRepository duelistaRepository;
+    DuelistaService duelistaService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +43,33 @@ public class MainActivity extends AppCompatActivity {
         edtName = findViewById(R.id.edtName);
         btnGuardar = findViewById(R.id.btnGuardar);
         btnMostrar = findViewById(R.id.btnMostrar);
-        btnSincronizar = findViewById(R.id.btnSincronizar);
 
         AppDataBase db = AppDataBase.getInstance(getApplicationContext());
-        DuelistaRepository duelistaRepository = db.duelistaRepository();
+        duelistaRepository = db.duelistaRepository();
+        duelistaService = mRetro.create(DuelistaService.class);
+
+        if(isNetworkConnected()) {
+            List<Duelista> dueli = duelistaRepository.getAllDuelista();
+            for(Duelista duel: dueli){
+                if(duel.sincD == false){
+                    duel.sincD = true;
+                    Call<Duelista> call = duelistaService.create(duel);
+                    call.enqueue(new Callback<Duelista>() {
+                        @Override
+                        public void onResponse(Call<Duelista> call, Response<Duelista> response) {
+                            Duelista data = response.body();
+                            Toast.makeText(getBaseContext(), "DATOS SINCRONIZADOS", Toast.LENGTH_SHORT).show();
+                            Log.i("MAIN_APP: BD", new Gson().toJson(data));
+                        }
+
+                        @Override
+                        public void onFailure(Call<Duelista> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+        }
 
         btnGuardar.setOnClickListener(view -> {
 
@@ -52,78 +78,36 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 Duelista duelista = new Duelista();
                 duelista.name = edtName.getText().toString();
-                duelista.sincD = false;
+                if(isNetworkConnected()) duelista.sincD = true;
                 duelistaRepository.create(duelista);
                 edtName.setText("");
                 Log.i("MAIN_APP: DB", new Gson().toJson(duelista));
+
+                if(isNetworkConnected()){{
+                    Call<Duelista> call = duelistaService.create(duelista);
+                    call.enqueue(new Callback<Duelista>() {
+                        @Override
+                        public void onResponse(Call<Duelista> call, Response<Duelista> response) {
+                            Duelista data = response.body();
+                            Toast.makeText(getBaseContext(), "DATOS SINCRONIZADOS", Toast.LENGTH_SHORT).show();
+                            Log.i("MAIN_APP: BD", new Gson().toJson(data));
+                        }
+                        @Override
+                        public void onFailure(Call<Duelista> call, Throwable t) {
+                        }
+                    });
+                }}
             }
+
         });
 
         btnMostrar.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ListaDuelista.class);
             startActivity(intent);
         });
-
-        DuelistaService duelistaService = mRetro.create(DuelistaService.class);
-
-        btnSincronizar.setOnClickListener(view -> {
-
-            if (isNetworkConnected()){
-                List<Duelista> Sduelistas = duelistaRepository.searchDuelista(false);
-                for (Duelista duelista :Sduelistas) {
-                    Log.d("MAIN_APP: DBDuel", new Gson().toJson(duelista));
-                    duelista.sincD = true;
-                    duelistaRepository.update(duelista);
-                    Sincronizacion(duelistaService,duelista);//SINC
-                }
-                List<Duelista> DeleteDB =duelistaRepository.getAllDuelista();
-                WS(duelistaService,duelistaRepository,DeleteDB);
-                Toast.makeText(getBaseContext(), "SINCRONIZADO", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getBaseContext(), "NO HAY CONEXION A INTERNET", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
-    private void Sincronizacion(DuelistaService duelistaService, Duelista duelista){
-        Call<Duelista> call= duelistaService.create(duelista);
-        call.enqueue(new Callback<Duelista>() {
-            @Override
-            public void onResponse(Call<Duelista> call, Response<Duelista> response) {
-                if (response.isSuccessful()) {
-                    Duelista data = response.body();
-                    Log.i("MAIN_APP: WS", new Gson().toJson(data));
-                }
-            }
-            @Override
-            public void onFailure(Call<Duelista> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void WS(DuelistaService duelistaService,DuelistaRepository duelistaRepository , List<Duelista> DeleteD){
-        duelistaRepository.deleteList(DeleteD);//DELETE
-
-        Call<List<Duelista>> call = duelistaService.getAllUser();//CARGAR
-        call.enqueue(new Callback<List<Duelista>>() {
-            @Override
-            public void onResponse(Call<List<Duelista>> call, Response<List<Duelista>> response) {
-                List<Duelista> data = response.body();
-                Log.i("MAIN_APP: WB", new Gson().toJson(data));
-
-                for (Duelista duelista : data) {
-                    duelistaRepository.create(duelista);
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Duelista>> call, Throwable t) {
-            }
-        });
-
     }
 }
