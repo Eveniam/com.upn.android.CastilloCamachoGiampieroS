@@ -37,7 +37,6 @@ public class DetalleDuelista extends AppCompatActivity {
 
     Retrofit mRetro;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -52,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
             List<Duelista> dueli = duelistaRepository.getAllDuelista();
             for(Duelista duel: dueli){
                 if(duel.sincD == false){
-                    duel.sincD = true;
+                    Duelista duelista = new Duelista();
+                    duelista.sincD = true;
+                    duelistaRepository.update(duelista);
+
                     Call<Duelista> call = duelistaService.create(duel);
                     call.enqueue(new Callback<Duelista>() {
                         @Override
@@ -61,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "DATOS SINCRONIZADOS", Toast.LENGTH_SHORT).show();
                             Log.i("MAIN_APP: BD", new Gson().toJson(data));
                         }
-
                         @Override
                         public void onFailure(Call<Duelista> call, Throwable t) {
 
