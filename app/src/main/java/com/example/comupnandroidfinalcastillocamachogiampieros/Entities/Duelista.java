@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Duelista")
 public class Duelista {
+
+    public int idD;
     @PrimaryKey(autoGenerate = true)
     public int id;
 
@@ -14,15 +16,4 @@ public class Duelista {
 
     @ColumnInfo(name = "sincD")
     public boolean sincD;
-
-    public Duelista() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

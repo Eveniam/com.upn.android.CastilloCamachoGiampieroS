@@ -2,6 +2,7 @@ package com.example.comupnandroidfinalcastillocamachogiampieros;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -36,10 +37,14 @@ public class DetalleDuelista extends AppCompatActivity {
 
     Retrofit mRetro;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_duelista);
+
+        Intent intent =  new Intent(getApplicationContext(), MapsActivity.class);
+        startActivity(intent);
 
         mRetro = RetrofitBuilder.build();
 
@@ -62,18 +67,24 @@ public class DetalleDuelista extends AppCompatActivity {
         tvIDD.setText(String.valueOf(duelista.id));
         tvNameD.setText(duelista.name);
 
-        btnRM.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), RegistrarCarta.class);
-            intent.putExtra("id", idObtener);
-            Log.i("APP_MAIN: id", String.valueOf(idObtener));
-            startActivity(intent);
+        btnRM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegistrarCarta.class);
+                intent.putExtra("id", idObtener);
+                Log.i("APP_MAIN: id", String.valueOf(idObtener));
+                startActivity(intent);
+            }
         });
 
-        btnMM.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MostrarCarta.class);
-            intent.putExtra("id2", idObtener);
-            Log.i("APP_MAIN: id2", String.valueOf(idObtener));
-            startActivity(intent);
+        btnMM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MostrarCarta.class);
+                intent.putExtra("id2", idObtener);
+                Log.i("APP_MAIN: id2", String.valueOf(idObtener));
+                startActivity(intent);
+            }
         });
 
 

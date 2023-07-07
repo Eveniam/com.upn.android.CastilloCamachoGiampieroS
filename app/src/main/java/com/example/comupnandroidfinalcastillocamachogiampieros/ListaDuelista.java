@@ -28,7 +28,11 @@ public class ListaDuelista extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvListaDuelista = findViewById(R.id.rvListaDuelista);
         rvListaDuelista.setLayoutManager(layoutManager);
+        mostrarBD();
 
+    }
+
+    private void mostrarBD(){
         AppDataBase db = AppDataBase.getInstance(this);
         DuelistaRepository repository = db.duelistaRepository();
         List<Duelista> mdata = repository.getAllDuelista();

@@ -24,10 +24,8 @@ public interface DuelistaRepository {
 
     @Update
     void  update(Duelista duelista);
-
     @Insert
     void create(Duelista duelista);
-
     @Delete
     void deleteList(List<Duelista> duelistas);
 }

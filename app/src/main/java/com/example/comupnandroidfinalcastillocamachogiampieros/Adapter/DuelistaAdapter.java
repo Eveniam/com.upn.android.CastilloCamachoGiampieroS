@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DuelistaAdapter extends RecyclerView.Adapter {
 
-    TextView tvID, tvName;
+    TextView tvID, tvName, tvDuelistaSincro;
     private List<Duelista> items;
     public DuelistaAdapter(List<Duelista> items) {
         this.items = items;
@@ -30,30 +30,26 @@ public class DuelistaAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        DuelistaAdapter.NameViewHolder viewHolder;
+
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if(viewType == 1) {
-            View view = inflater.inflate(R.layout.activity_duelista_adapter, parent, false);
-            viewHolder = new NameViewHolder(view);
-        } else {
-            View view = inflater.inflate(R.layout.item_progressbar, parent, false);
-            viewHolder = new NameViewHolder(view);
-        }
+        View view = inflater.inflate(R.layout.activity_duelista_adapter,parent,false);
+        NameViewHolder viewHolder = new NameViewHolder(view);
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Duelista item = items.get(position);
-
-        if(item == null) return;
         View view = holder.itemView;
 
         tvID = view.findViewById(R.id.tvID);
         tvName = view.findViewById(R.id.tvName);
+        tvDuelistaSincro = view.findViewById(R.id.tvDuelistaSincro);
 
         tvID.setText(String.valueOf(item.id));
         tvName.setText(item.name);
+        tvDuelistaSincro.setText(String.valueOf(item.sincD));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,12 +65,6 @@ public class DuelistaAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return items.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        Duelista item = items.get(position);
-        return item == null ? 0 : 1;
     }
 
     public class NameViewHolder extends RecyclerView.ViewHolder {

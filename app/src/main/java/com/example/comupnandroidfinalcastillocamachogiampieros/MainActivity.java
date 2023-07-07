@@ -52,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 Duelista duelista = new Duelista();
                 duelista.name = edtName.getText().toString();
+                duelista.sincD = false;
                 duelistaRepository.create(duelista);
                 edtName.setText("");
-                Log.i("MAIN_APP: Guarda en DB", new Gson().toJson(duelista));
+                Log.i("MAIN_APP: DB", new Gson().toJson(duelista));
             }
         });
 
@@ -67,19 +68,19 @@ public class MainActivity extends AppCompatActivity {
 
         btnSincronizar.setOnClickListener(view -> {
 
-            if (!isNetworkConnected()){
-                Toast.makeText(getBaseContext(), "NO HAY CONEXION A INTERNET", Toast.LENGTH_SHORT).show();
-            }else{
+            if (isNetworkConnected()){
                 List<Duelista> Sduelistas = duelistaRepository.searchDuelista(false);
                 for (Duelista duelista :Sduelistas) {
                     Log.d("MAIN_APP: DBDuel", new Gson().toJson(duelista));
                     duelista.sincD = true;
                     duelistaRepository.update(duelista);
-                    Sincronizacion(duelistaService,duelista);
+                    Sincronizacion(duelistaService,duelista);//SINC
                 }
                 List<Duelista> DeleteDB =duelistaRepository.getAllDuelista();
                 WS(duelistaService,duelistaRepository,DeleteDB);
-
+                Toast.makeText(getBaseContext(), "SINCRONIZADO", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getBaseContext(), "NO HAY CONEXION A INTERNET", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Duelista>> call, Response<List<Duelista>> response) {
                 List<Duelista> data = response.body();
-                Log.i("MAIN_APP", new Gson().toJson(data));
+                Log.i("MAIN_APP: WB", new Gson().toJson(data));
 
                 for (Duelista duelista : data) {
                     duelistaRepository.create(duelista);
