@@ -26,6 +26,9 @@ public interface DuelistaRepository {
     void  update(Duelista duelista);
     @Insert
     void create(Duelista duelista);
+
+    @Insert
+    void createWB(List<Duelista> duelista);
     @Delete
     void deleteList(List<Duelista> duelistas);
 }

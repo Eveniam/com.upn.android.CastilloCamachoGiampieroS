@@ -21,8 +21,10 @@ public interface DuelistaService {
     Call<Duelista> create(@Body Duelista duelista);
 
     @PUT("Duelista")
-    Call<List<Duelista>> update(@Body List<Duelista> duelistas);
+    Call<Duelista> update(@Body Duelista duelistas);
+    @POST("Duelista")
+    Call<List<Duelista>> createList(@Body List<Duelista> duelistas);
 
     @DELETE("Duelista")
-    Call<Void> deleteAll();
+    Call<Void> deleteAll(@Path("id") int id);
 }

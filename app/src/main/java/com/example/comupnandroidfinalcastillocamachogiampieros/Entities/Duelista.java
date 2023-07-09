@@ -14,5 +14,5 @@ public class Duelista {
     public String name;
 
     @ColumnInfo(name = "sincD")
-    public boolean sincD;
+    public boolean sincD = false;
 }

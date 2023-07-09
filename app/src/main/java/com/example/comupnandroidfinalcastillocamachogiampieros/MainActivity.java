@@ -18,7 +18,6 @@ import com.example.comupnandroidfinalcastillocamachogiampieros.Service.DuelistaS
 import com.example.comupnandroidfinalcastillocamachogiampieros.Utils.RetrofitBuilder;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toast.makeText(getBaseContext(), " BIENVENIDOS", Toast.LENGTH_SHORT).show();
+
+
         mRetro = RetrofitBuilder.build();
 
         edtName = findViewById(R.id.edtName);
@@ -48,13 +50,18 @@ public class MainActivity extends AppCompatActivity {
         duelistaRepository = db.duelistaRepository();
         duelistaService = mRetro.create(DuelistaService.class);
 
+        Log.i("MAIN_APP: MAIN", "ENTRANDO");
+
         if(isNetworkConnected()) {
+
             List<Duelista> dueli = duelistaRepository.getAllDuelista();
+            Log.i("MAIN_APP: BDMain", new Gson().toJson(dueli));
+
             for(Duelista duel: dueli){
-                if(duel.sincD == false){
+                if(duel.sincD == true){
                     Duelista duelista = new Duelista();
-                    duelista.sincD = true;
-                    duelistaRepository.update(duelista);
+                    duelista.sincD = false;
+                    duelistaRepository.create(duelista);
 
                     Call<Duelista> call = duelistaService.create(duel);
                     call.enqueue(new Callback<Duelista>() {
@@ -80,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 Duelista duelista = new Duelista();
                 duelista.name = edtName.getText().toString();
-                if(isNetworkConnected()) duelista.sincD = true;
+                if(!isNetworkConnected()) duelista.sincD = true;
+
                 duelistaRepository.create(duelista);
                 edtName.setText("");
                 Log.i("MAIN_APP: DB", new Gson().toJson(duelista));
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();

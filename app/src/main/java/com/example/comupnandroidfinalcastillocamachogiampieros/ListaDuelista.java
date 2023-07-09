@@ -33,6 +33,8 @@ public class ListaDuelista extends AppCompatActivity {
     Retrofit mRetro;
 
     List<Duelista> mdata = new ArrayList<>();
+
+    List<Duelista> bD = new ArrayList<>();
     DuelistaAdapter mAdapter = new DuelistaAdapter(mdata);
 
     @Override
@@ -51,17 +53,24 @@ public class ListaDuelista extends AppCompatActivity {
 
         AppDataBase db = AppDataBase.getInstance(this);
         DuelistaRepository repository = db.duelistaRepository();
+
         List<Duelista> duel = repository.getAllDuelista();
 
         if(isNetworkConnected()){
-            Call<List<Duelista>> call = service.update(duel);
+            Call<List<Duelista>> call = service.getAllUser();
             call.enqueue(new Callback<List<Duelista>>() {
                 @Override
                 public void onResponse(Call<List<Duelista>> call, Response<List<Duelista>> response) {
+                    Toast.makeText(getBaseContext(), "RESPUESTA DEL WEB SERVICE", Toast.LENGTH_SHORT).show();
                     if (response.isSuccessful()) {
-                        List<Duelista> updatedDuelistas = response.body();
+                        List<Duelista> duelistas = response.body();
+                        repository.createWB(duelistas);
+
                         mdata.clear();
-                        mdata.addAll(updatedDuelistas);
+                        mdata.addAll(duelistas);
+
+                        bD = new ArrayList<>(duelistas); // Actualizar la lista bD con los duelistas obtenidos
+
                         mAdapter.notifyDataSetChanged();
                         Toast.makeText(getBaseContext(), "DATOS ACTUALIZADOS", Toast.LENGTH_SHORT).show();
                     }
